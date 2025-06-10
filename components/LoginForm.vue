@@ -1,18 +1,45 @@
 <template>
-  <div class="flex justify-center items-center min-h-screen bg-gray-100">
+  <div class="flex justify-center items-center min-h-screen">
     <div class="w-full max-w-md p-8 bg-white rounded shadow">
       <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
 
       <form @submit.prevent="login" class="space-y-4">
-        <UFormGroup label="Username" :error="errors.username">
-          <UInput v-model="form.username" />
-        </UFormGroup>
+        <div class="space-y-1">
+          <label for="username" class="block text-sm font-medium"
+            >Username</label
+          >
+          <input
+            v-model="form.username"
+            id="username"
+            type="text"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+          />
+          <p v-if="errors.username" class="text-red-500 text-sm">
+            {{ errors.username }}
+          </p>
+        </div>
 
-        <UFormGroup label="Password" :error="errors.password">
-          <UInput v-model="form.password" type="password" />
-        </UFormGroup>
+        <div class="space-y-1">
+          <label for="password" class="block text-sm font-medium"
+            >Password</label
+          >
+          <input
+            v-model="form.password"
+            id="password"
+            type="password"
+            class="w-full border border-gray-300 rounded px-3 py-2"
+          />
+          <p v-if="errors.password" class="text-red-500 text-sm">
+            {{ errors.password }}
+          </p>
+        </div>
 
-        <UButton type="submit" block>Login</UButton>
+        <button
+          type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded cursor-pointer"
+        >
+          Login
+        </button>
       </form>
     </div>
   </div>
@@ -39,7 +66,7 @@ const errors = ref<Record<string, string>>({});
 
 const schema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
-  password: Yup.string().min(6, "Password must be at least 6 characters"),
+  password: Yup.string().min(4, "Password must be at least 4 characters"),
 });
 
 async function login() {
@@ -52,7 +79,7 @@ async function login() {
     });
 
     if (res.success) {
-      router.push("/");
+      router.push("/home");
     }
   } catch (err: any) {
     if (err.name === "ValidationError") {

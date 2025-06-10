@@ -1,4 +1,3 @@
-// server/repositories/user.ts
 import { z } from "zod";
 import { userSchema } from "../utils/zod";
 
@@ -9,12 +8,12 @@ export type User = z.infer<typeof userSchema> & {
 const users: User[] = [
   {
     username: "admin",
-    password: "123456",
+    password: "admin",
     role: "admin",
   },
   {
     username: "employee",
-    password: "123456",
+    password: "employee",
     role: "employee",
   },
 ];

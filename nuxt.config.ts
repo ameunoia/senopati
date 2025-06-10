@@ -8,9 +8,6 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  nitro: {
-    session: {
-      password: "a-very-secret-password-1234567890", // Must be at least 32 chars
-    },
-  },
+  nitro: {},
+  modules: ["@nuxt/ui"],
 });

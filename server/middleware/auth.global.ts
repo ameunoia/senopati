@@ -1,23 +1,21 @@
-// server/middleware/auth.global.ts
-import { sessionConfig } from "../utils/sessionConfig";
-
 export default defineEventHandler(async (event) => {
   const url = event.node.req.url;
 
-  if (url?.startsWith("/admin")) {
-    const session = await useSession(event, sessionConfig);
+  const protectedPaths = ["/home", "/admin"];
+
+  if (protectedPaths.some((path) => url?.startsWith(path))) {
+    const session = await useSession(event, {
+      password: "a-very-secret-password-1234567890",
+    });
 
     if (!session.data.user) {
-      throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
+      sendRedirect(event, "/", 302);
+      return;
     }
 
-    const user = session.data.user as { role: string };
-
-    if (user.role !== "admin") {
-      throw createError({
-        statusCode: 403,
-        statusMessage: "Forbidden: Admins only",
-      });
+    if (url?.startsWith("/admin") && session.data.user.role !== "admin") {
+      sendRedirect(event, "/home", 302);
+      return;
     }
   }
 });
